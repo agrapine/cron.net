@@ -14,11 +14,11 @@ A CRON expression is a string comprising five or six fields separated by white s
  │ │ │ │ │
  │ │ │ │ │
  * * * * *  command to execute
-(0 0 1 1 *)	@yearly				Run once a year at midnight of 1 January
-(0 0 1 * *)	@monthly			Run once a month at midnight of the first day of the month
-(0 0 * * 0)	@weekly				Run once a week at midnight on Sunday morning
-(0 0 * * *)	@daily				Run once a day at midnight
-(0 * * * *) @hourly				Run once an hour at the beginning of the hour
+(0 0 1 1 *) @yearly             Run once a year at midnight of 1 January
+(0 0 1 * *) @monthly            Run once a month at midnight of the first day of the month
+(0 0 * * 0) @weekly             Run once a week at midnight on Sunday morning
+(0 0 * * *) @daily              Run once a day at midnight
+(0 * * * *) @hourly             Run once an hour at the beginning of the hour
 ```
 
 | Field          | Req. | Allowed Values  | Allowed chars | Remarks  |
