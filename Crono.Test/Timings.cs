@@ -13,20 +13,22 @@ namespace Crono.Test
             Assert.Equal(4, Add(2, 2));
         }
 
-        [Fact]
-        public void FirstOfJanYearly()
+        [Theory]
+        [InlineData(10)]
+        [InlineData(1000)]
+        [InlineData(10000)]
+        public void FirstOfJanYearly(int years)
         {
-            var creationDate = new DateTime(2017, 10, 6);
+            var creationDate = new DateTime(1985, 9, 30);
 
             //Run once a year at midnight of 1 January
             var chronos = new Chronos("0 0 1 1 *");
 
-            var expectedValidDates = 1000000;
-            var actualValidDates = chronos.Tick(creationDate)
-                .TakeWhile((x, i) => x.Day == 1 && x.Month == 1 && i < expectedValidDates)
+            var validYears = chronos.Tick(creationDate)
+                .TakeWhile((x, i) => x.Day == 1 && x.Month == 1 && i < years)
                 .Count();
 
-            Assert.Equal(actualValidDates, expectedValidDates);
+            Assert.Equal(validYears, years);
         }
 
         public int Add(int v1, int v2) => v1 + v2;

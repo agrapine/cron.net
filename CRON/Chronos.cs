@@ -45,9 +45,29 @@ namespace CRON
         }
     }
 
-    public class ChronoLexer
+    public class ChronoRanger
     {
-        
+        public ChronoRanger(DateTime reference, string segment, int range)
+        {
+            if (string.IsNullOrEmpty(segment))
+                throw new ArgumentNullException(nameof(segment));
+            var splits = segment.Split(',');
+        }
+    }
+
+    public class WeekRanger
+    {
+        public bool[] Days { get; set; }
+
+        public WeekRanger(string segment)
+        {
+            if (string.IsNullOrEmpty(segment))
+                throw new ArgumentNullException(nameof(segment));
+            Days = new bool[7];
+
+            var parts = segment.Split(',');
+
+        }
     }
 
     public class Cronik : IEnumerator<DateTime>
