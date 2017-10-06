@@ -4,6 +4,7 @@ CRON.NET Engine
 
 A CRON expression is a string comprising five or six fields separated by white space that represents a set of times, normally as a schedule to execute some routine.
 
+`
  ┌───────────── minute (0 - 59)
  │ ┌───────────── hour (0 - 23)
  │ │ ┌───────────── day of month (1 - 31)
@@ -13,6 +14,7 @@ A CRON expression is a string comprising five or six fields separated by white s
  │ │ │ │ │
  │ │ │ │ │
  * * * * *  command to execute
+`
 
 | Field          | Req. | Allowed Values  | Allowed chars | Remarks  |
 |----------------|------|-----------------|---------------|----------|
