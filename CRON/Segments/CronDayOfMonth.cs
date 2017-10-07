@@ -4,33 +4,34 @@ using System.Linq;
 
 namespace CRON.Segments
 {
-    public class CronMinute : CronSegment
+    //TODO implement ordinals and workdays
+    public class CronDayOfMonth : CronSegment
     {
-        public CronMinute(DateTime outset, string exprSeg) : base(CronSeg.Minute, outset, exprSeg)
+        public CronDayOfMonth(DateTime outset, string exprSeg) : base(CronSeg.Month, outset, exprSeg)
         {
         }
 
         public override bool Holds(DateTime current)
         {
-            return Indexes.Contains(current.Minute);
+            return Indexes.Contains(current.Day);
         }
 
         protected override bool TryParseIndex(string expr, out int index)
         {
             index = 0;
-            if (!int.TryParse(expr, out var value) || value < 0 || value > 59) return false;
+            if (!int.TryParse(expr, out var value) || value < 1 || value > 31) return false;
             index = value;
             return true;
         }
 
         protected override IEnumerable<int> SIndex()
         {
-            return Enumerable.Range(0, 60);
+            return Enumerable.Range(1, 31);
         }
 
         protected override int QIndex()
         {
-            return Outset.Minute;
+            return Outset.Day;
         }
     }
 }

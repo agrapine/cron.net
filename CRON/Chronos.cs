@@ -14,6 +14,7 @@ Takes a CRON cron then yields starting from reference
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using CRON.Exceptions;
 using CRON.Segments;
 
@@ -21,6 +22,8 @@ namespace CRON
 {
     /// <summary>
     ///     Chronos, The Enumerator
+    /// TODO progressive interval increase (not quite sure how yet)
+    /// TODO figure out to calibrate (restore) a state machine from outset
     /// </summary>
     public class Chronos : IEnumerator<DateTime>, IEnumerable<DateTime>
     {
@@ -34,34 +37,48 @@ namespace CRON
             if (string.IsNullOrEmpty(cron))
                 throw new CronFaultExpr();
 
-            Outset = outset;
-
+            Outset = new DateTime(outset.Year, outset.Month, outset.Day, outset.Hour, outset.Minute, 0);
+            
             var parts = cron.Split(' ');
-            if (parts.Length < 5)
+            if (parts.Length != 5)
                 throw new CronFaultExpr();
 
             Minute = new CronMinute(Outset, parts[0]);
             Hour = new CronHour(Outset, parts[1]);
+            DayOfMonth = new CronDayOfMonth(Outset, parts[2]);
             Month = new CronMonth(Outset, parts[3]);
+            /*Day Of Week*/
+            Segments = new CronSegment[] {Minute, Hour, DayOfMonth, Month};
+            
+            Reset();
         }
 
         public DateTime Outset { get; }
+        public DateTime Current { get; protected set; }
 
         public CronHour Hour { get; }
         public CronMinute Minute { get; }
+        public CronDayOfMonth DayOfMonth { get; }
         public CronMonth Month { get; }
+        public CronSegment[] Segments { get; }
 
         public bool MoveNext()
         {
-            throw new NotImplementedException();
+            var current = Current;
+            do
+            {
+                current = current.AddMinutes(1);
+            } while (Segments.Any(s => !s.Holds(current)));
+
+            Current = current;
+            return true;
         }
 
         public void Reset()
         {
-            throw new NotImplementedException();
+            Current = Outset;
         }
 
-        public DateTime Current => Outset;
 
         object IEnumerator.Current => Current;
 

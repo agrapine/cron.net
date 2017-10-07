@@ -21,6 +21,11 @@ namespace CRON.Segments
             "SAT"
         };
 
+        public override bool Holds(DateTime current)
+        {
+            return Indexes.Contains(current.Month);
+        }
+
         protected override bool TryParseIndex(string expr, out int index)
         {
             index = 0;

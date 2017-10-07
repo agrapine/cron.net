@@ -3,7 +3,6 @@ using System.Linq;
 using CRON;
 using CRON.Exceptions;
 using Xunit;
-using Xunit.Sdk;
 
 namespace Crono.Test
 {
@@ -18,7 +17,6 @@ namespace Crono.Test
         [Theory]
         [InlineData(10, "0 0 1 1 *")]
         [InlineData(1000, "0 0 1 1 *")]
-        [InlineData(9998, "0 0 1 1 *")]
         public void FirstOfJanYearly(int expected, string cron)
         {
             var date = new DateTime(1985, 9, 30);
@@ -58,6 +56,16 @@ namespace Crono.Test
         public void FaultyExpr(string cron)
         {
             Assert.Throws<CronFaultExpr>(() => new Chronos(DateTime.Now, cron));
+        }
+
+        [Theory]
+        [InlineData("2017-10-06 16:00:00", "10,40 7 * * *", "2017-10-07 07:10:00")]
+        [InlineData("2017-10-06 16:00:00", "10,40 7 1 * *", "2017-11-01 07:10:00")]
+        [InlineData("2017-10-06 16:00:00", "10,40 7 30 * *", "2017-10-30 07:10:00")]
+        [InlineData("2017-10-06 16:00:00", "10,40 7 1W * *", "2017-10-09 07:10:00")]
+        public void GetNextExpected(string outset, string cron, string expected)
+        {
+            Assert.Equal(DateTime.Parse(expected), Chronicle.Roam(DateTime.Parse(outset), cron).First());
         }
 
         public int Add(int v1, int v2) => v1 + v2;

@@ -12,7 +12,7 @@ namespace CRON.Segments
 
         protected override IEnumerable<int> SIndex()
         {
-            return Enumerable.Range(0, 23);
+            return Enumerable.Range(0, 24);
         }
 
         protected override int QIndex()
@@ -26,6 +26,11 @@ namespace CRON.Segments
             if (!int.TryParse(expr, out var value) || value < 0 || value > 23) return false;
             index = value;
             return true;
+        }
+
+        public override bool Holds(DateTime current)
+        {
+            return Indexes.Contains(current.Hour);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace CRON.Segments
         }
 
         protected DateTime Outset { get; }
-        public List<int> Indexes { get; } = new List<int>();
+        protected List<int> Indexes { get; } = new List<int>();
 
         protected CronSeg Segment { get; }
 
@@ -61,6 +61,13 @@ namespace CRON.Segments
                     }
             }
         }
+
+        /// <summary>
+        /// Validates part
+        /// </summary>
+        /// <param name="current"></param>
+        /// <returns></returns>
+        public abstract bool Holds(DateTime current);
 
         /// <summary>
         ///     Parse index
