@@ -8,18 +8,17 @@ namespace CRON.Segments
     {
         public readonly string[] ShortMonths = 
         {
-            "JAN",
-            "FEB",
-            "MAR",
-            "APR",
-            "MAY",
-            "JUN",
-            "JUL",
-            "AUG",
-            "SEP",
-            "OCT",
-            "NOV",
-            "DEC"
+            "JAN","FEB","MAR",
+            "APR","MAY","JUN",
+            "JUL","AUG","SEP",
+            "OCT","NOV","DEC"
+        };
+
+        public readonly string[] ShortWeeks =
+        {
+            "SUN", "MON", "TUE",
+            "WED", "THU", "FRI",
+            "SAT"
         };
 
         protected override bool TryParseIndex(string expr, out int index)

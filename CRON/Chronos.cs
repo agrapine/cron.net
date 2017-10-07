@@ -80,26 +80,4 @@ namespace CRON
             return GetEnumerator();
         }
     }
-
-    public class Cronik : IEnumerator<DateTime>
-    {
-        public bool MoveNext()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Reset()
-        {
-            throw new NotImplementedException();
-        }
-
-        public DateTime Current { get; }
-
-        object IEnumerator.Current => Current;
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
-    }
 }

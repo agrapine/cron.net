@@ -36,12 +36,13 @@ namespace Crono.Test
         [InlineData("2017-10-06", "1-5 * * * *")]
         [InlineData("2017-10-06", "0,5 * * * *")]
         [InlineData("2017-10-06", "1,5,30-35 * * * *")]
+        [InlineData("2017-10-06", "0 0-23 * * *")]
+        [InlineData("2017-10-06", "0 0 * 2,SEP-DEC *")]
         [InlineData("2017-10-06", "? * * * *")]
         public void Lexer(string date, string cron)
         {
             var target = DateTime.Parse(date);
             var chronos = new Chronos(target, cron);
-
             Assert.Equal(true, true);
         }
 
@@ -49,7 +50,11 @@ namespace Crono.Test
         [InlineData(null)]
         [InlineData("")]
         [InlineData("* * * *")]
-        [InlineData("0-60 * * * *")]
+        [InlineData("-1 * * * *")]
+        [InlineData("60 * * * *")]
+        [InlineData("5-1 * * * *")]
+        [InlineData("* 24 * * *")]
+        [InlineData("* -1 * * *")]
         public void FaultyExpr(string cron)
         {
             Assert.Throws<CronFaultExpr>(() => new Chronos(DateTime.Now, cron));
