@@ -8,7 +8,7 @@ Usage
 `Chronicle.Roam(outset, cronExpression).Take(5)`
 `Chronicle.Roam(outset, cronExpression).TakeWhile(x => x.Year < 2050)`
 
-A CRON expression is a string comprising five or six fields separated by white space that represents a set of times, normally as a schedule to execute some routine.
+A CRON expression is a string comprising five fields separated by white space that represents a set of times, normally as a schedule to execute some routine.
 
 ```
  ┌───────────── minute (0 - 59)
