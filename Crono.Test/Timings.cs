@@ -1,7 +1,9 @@
 using System;
 using System.Linq;
 using CRON;
+using CRON.Exceptions;
 using Xunit;
+using Xunit.Sdk;
 
 namespace Crono.Test
 {
@@ -14,21 +16,43 @@ namespace Crono.Test
         }
 
         [Theory]
-        [InlineData(10)]
-        [InlineData(1000)]
-        [InlineData(10000)]
-        public void FirstOfJanYearly(int years)
+        [InlineData(10, "0 0 1 1 *")]
+        [InlineData(1000, "0 0 1 1 *")]
+        [InlineData(9998, "0 0 1 1 *")]
+        public void FirstOfJanYearly(int expected, string cron)
         {
-            var creationDate = new DateTime(1985, 9, 30);
+            var date = new DateTime(1985, 9, 30);
 
-            //Run once a year at midnight of 1 January
-            var chronos = new Chronos("0 0 1 1 *");
-
-            var validYears = chronos.Tick(creationDate)
-                .TakeWhile((x, i) => x.Day == 1 && x.Month == 1 && i < years)
+            var actual = Chronicle.Roam(date, cron)
+                .TakeWhile((x, i) => x.Day == 1 && x.Month == 1 && i < expected)
                 .Count();
 
-            Assert.Equal(validYears, years);
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData("2017-10-06", "* * * * *")]
+        [InlineData("2017-10-06", "0 * * * *")]
+        [InlineData("2017-10-06", "1-5 * * * *")]
+        [InlineData("2017-10-06", "0,5 * * * *")]
+        [InlineData("2017-10-06", "1,5,30-35 * * * *")]
+        [InlineData("2017-10-06", "? * * * *")]
+        public void Lexer(string date, string cron)
+        {
+            var target = DateTime.Parse(date);
+            var chronos = new Chronos(target, cron);
+
+            Assert.Equal(true, true);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("* * * *")]
+        [InlineData("0-60 * * * *")]
+        public void FaultyExpr(string cron)
+        {
+            Assert.Throws<CronFaultExpr>(() => new Chronos(DateTime.Now, cron));
         }
 
         public int Add(int v1, int v2) => v1 + v2;

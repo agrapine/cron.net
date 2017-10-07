@@ -1,72 +1,83 @@
-﻿using System;
+﻿/*
+Takes a CRON cron then yields starting from reference
+┌───────────── minute (0 - 59)
+│ ┌───────────── hour (0 - 23)
+│ │ ┌───────────── day of month (1 - 31)
+│ │ │ ┌───────────── month (1 - 12)
+│ │ │ │ ┌───────────── day of week (0 - 6) (Sunday to Saturday;
+│ │ │ │ │                     7 is also Sunday on some systems)
+│ │ │ │ │
+│ │ │ │ │
+* * * * *  command to execute
+*/
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using CRON.Exceptions;
+using CRON.Segments;
 
 namespace CRON
 {
     /// <summary>
-    /// Takes a CRON expression then yields starting from reference
-    ///┌───────────── minute (0 - 59)
-    ///│ ┌───────────── hour (0 - 23)
-    ///│ │ ┌───────────── day of month (1 - 31)
-    ///│ │ │ ┌───────────── month (1 - 12)
-    ///│ │ │ │ ┌───────────── day of week (0 - 6) (Sunday to Saturday;
-    ///│ │ │ │ │                     7 is also Sunday on some systems)
-    ///│ │ │ │ │
-    ///│ │ │ │ │
-    ///* * * * *  command to execute
+    ///     Chronos, The Enumerator
     /// </summary>
-    public class Chronos
+    public class Chronos : IEnumerator<DateTime>, IEnumerable<DateTime>
     {
         /// <summary>
-        /// CRON Expression
+        ///     CRON Expression
         /// </summary>
-        /// <param name="expression"></param>
-        public Chronos(string expression)
+        /// <param name="cron"></param>
+        /// <param name="outset"></param>
+        public Chronos(DateTime outset, string cron)
         {
+            if (string.IsNullOrEmpty(cron))
+                throw new CronFaultExpr();
+
+            Outset = outset;
+
+            var parts = cron.Split(' ');
+            if (parts.Length < 5)
+                throw new CronFaultExpr();
+
+            Minute = new CronMinute(Outset, parts[0]);
+            Hour = new CronHour(Outset, parts[1]);
+            Month = new CronMonth(Outset, parts[3]);
         }
 
-        /// <summary>
-        ///     Start yielding from
-        /// </summary>
-        /// <param name="reference"></param>
-        /// <returns></returns>
-        public IEnumerable<DateTime> Tick(DateTime reference)
+        public DateTime Outset { get; }
+
+        public CronHour Hour { get; }
+        public CronMinute Minute { get; }
+        public CronMonth Month { get; }
+
+        public bool MoveNext()
         {
-            var current = new DateTime(reference.Year, 1, 1);
-            if (current < reference)
-                current = current.AddYears(1);
-            yield return current;
-            while (true)
-            {
-                current = current.AddYears(1);
-                yield return current;
-            }
+            throw new NotImplementedException();
         }
-    }
 
-    public class ChronoRanger
-    {
-        public ChronoRanger(DateTime reference, string segment, int range)
+        public void Reset()
         {
-            if (string.IsNullOrEmpty(segment))
-                throw new ArgumentNullException(nameof(segment));
-            var splits = segment.Split(',');
+            throw new NotImplementedException();
         }
-    }
 
-    public class WeekRanger
-    {
-        public bool[] Days { get; set; }
+        public DateTime Current => Outset;
 
-        public WeekRanger(string segment)
+        object IEnumerator.Current => Current;
+
+        public void Dispose()
         {
-            if (string.IsNullOrEmpty(segment))
-                throw new ArgumentNullException(nameof(segment));
-            Days = new bool[7];
+            throw new NotImplementedException();
+        }
 
-            var parts = segment.Split(',');
+        public IEnumerator<DateTime> GetEnumerator()
+        {
+            return this;
+        }
 
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 
@@ -84,10 +95,7 @@ namespace CRON
 
         public DateTime Current { get; }
 
-        object IEnumerator.Current
-        {
-            get { return Current; }
-        }
+        object IEnumerator.Current => Current;
 
         public void Dispose()
         {
