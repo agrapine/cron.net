@@ -1,6 +1,8 @@
 # cron.net
 *CRON.NET Expressive Engine*
 
+Usage `Chronicle.Roam(DateTime.Parse("2017-10-7"),"0 0 1 1 *").Take(5).ToList() => 2018-1-1, 2019-1-1, 2020-1-1, 2021-1-1, 2021-1-1`
+
 **A little something that is quite fustrating to get done proper.**
 
 A CRON expression is a string comprising five or six fields separated by white space that represents a set of times, normally as a schedule to execute some routine.
