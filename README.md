@@ -1,7 +1,7 @@
 # cron.net
 *CRON.NET Expressive Engine*
 
-**I've copied a lot from the net to aid me in carier. Today I wanted to give back by creating a little scheduler. I found this very nice spec on wiki on CRON so I gonna make an efficient implementation in .NET C#. I know I needed something like this, now maybe someone else will as well.**
+**A little something that is quite fustrating to get done proper.**
 
 A CRON expression is a string comprising five or six fields separated by white space that represents a set of times, normally as a schedule to execute some routine.
 
